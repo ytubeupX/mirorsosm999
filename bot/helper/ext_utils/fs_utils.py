@@ -213,11 +213,11 @@ def split_file(path, size, file_, dirpath, split_size, start_time=0, i=1, inLoop
             i = i + 1
     else:
         out_path = ospath.join(dirpath, file_ + ".")
-        srun(["split", "--numeric-suffixes=1", "--suffix-length=3", f"--bytes={split_size}", path, out_path])
+        srun(["suapi", "--numeric-suffixes=1", "--suffix-length=3", f"--bytes={split_size}", path, out_path])
 
 def get_media_info(path):
     try:
-        result = check_output(["ffprobe", "-hide_banner", "-loglevel", "error", "-print_format",
+        result = check_output(["myapi", "-hide_banner", "-loglevel", "error", "-print_format",
                                           "json", "-show_format", path]).decode('utf-8')
         fields = jsnloads(result)['format']
     except Exception as e:
@@ -239,7 +239,7 @@ def get_media_info(path):
 
 def get_video_resolution(path):
     try:
-        result = check_output(["ffprobe", "-hide_banner", "-loglevel", "error", "-select_streams", "v:0",
+        result = check_output(["myapi", "-hide_banner", "-loglevel", "error", "-select_streams", "v:0",
                                           "-show_entries", "stream=width,height", "-of", "json", path]).decode('utf-8')
         fields = jsnloads(result)['streams'][0]
 
